@@ -1,0 +1,102 @@
+<div class="mb-6 flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/10">
+    <div class="flex items-center gap-4">
+        <h3 class="text-white font-bold text-lg">Pilih Lantai:</h3>
+        <div class="flex gap-2">
+            <% for(let l=1; l<=5; l++) { %>
+                <a href="/stores/map?lantai=<%= l %>" class="w-10 h-10 rounded-lg flex items-center justify-center font-bold transition-all <%= lantai === l ? 'bg-sky-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.5)]' : 'bg-white/10 text-slate-400 hover:bg-white/20 hover:text-white' %>">
+                    <%= l %>
+                </a>
+            <% } %>
+        </div>
+    </div>
+    
+    <div class="flex items-center gap-4 text-xs font-medium bg-slate-900/50 py-2 px-4 rounded-xl border border-white/5">
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-md bg-emerald-500/30 border border-emerald-500/50"></div>
+            <span class="text-slate-300">Tersedia (Kosong)</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-md bg-rose-500/30 border border-rose-500/50"></div>
+            <span class="text-slate-300">Disewa</span>
+        </div>
+    </div>
+</div>
+
+<div class="glass-panel p-8 max-w-5xl mx-auto flex flex-col items-center">
+    
+    <div class="w-full max-w-4xl bg-slate-800/50 border border-slate-700 rounded-3xl p-8 mb-8 relative overflow-hidden">
+        <!-- Decoration light -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-sky-500/20 blur-[80px] rounded-full pointer-events-none"></div>
+        
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-black text-white tracking-widest uppercase">MALL TENANT AREA</h2>
+            <p class="text-slate-400 text-sm mt-1">Lantai <%= lantai %></p>
+        </div>
+
+        <div class="flex justify-between gap-12 relative">
+            
+            <!-- Left Sector -->
+            <div class="flex-1 grid grid-cols-2 gap-4">
+                <% leftBlocks.forEach(b => { 
+                    const store = storeMap[b];
+                    const isOccupied = store && store.status === 'Disewa';
+                %>
+                    <div class="relative group cursor-pointer">
+                        <div class="h-20 rounded-xl border flex flex-col items-center justify-center transition-all duration-300 <%= isOccupied ? 'bg-rose-500/20 border-rose-500/50 text-rose-300' : 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(16,185,129,0.3)]' %>">
+                            <span class="font-bold text-lg"><%= b %></span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider mt-1 opacity-80"><%= isOccupied ? (store.kategori == 'Food Store' ? 'F&B' : 'Retail') : 'KOSONG' %></span>
+                        </div>
+                        
+                        <% if(store) { %>
+                        <!-- Tooltip -->
+                        <div class="absolute inset-x-0 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 flex justify-center">
+                            <div class="bg-slate-900 border border-white/10 text-white text-xs rounded-lg py-2 px-3 shadow-xl whitespace-nowrap">
+                                <div class="font-bold text-sky-400 mb-1"><%= store.nama_store %></div>
+                                <div class="text-[10px] text-slate-400">ID: <%= store.id_store %> | <%= store.kategori %></div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Central Aisle -->
+            <div class="w-16 shrink-0 relative flex justify-center border-x border-dashed border-white/10">
+                <div class="absolute inset-y-0 flex items-center justify-center writing-vertical-lr rotate-180">
+                    <span class="text-slate-600/50 font-black text-2xl tracking-[1em] uppercase">JALAN UTAMA</span>
+                </div>
+            </div>
+
+            <!-- Right Sector -->
+            <div class="flex-1 grid grid-cols-2 gap-4">
+                <% rightBlocks.forEach(b => { 
+                    const store = storeMap[b];
+                    const isOccupied = store && store.status === 'Disewa';
+                %>
+                    <div class="relative group cursor-pointer">
+                        <div class="h-20 rounded-xl border flex flex-col items-center justify-center transition-all duration-300 <%= isOccupied ? 'bg-rose-500/20 border-rose-500/50 text-rose-300' : 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(16,185,129,0.3)]' %>">
+                            <span class="font-bold text-lg"><%= b %></span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider mt-1 opacity-80"><%= isOccupied ? (store.kategori == 'Food Store' ? 'F&B' : 'Retail') : 'KOSONG' %></span>
+                        </div>
+                        
+                        <% if(store) { %>
+                        <!-- Tooltip -->
+                        <div class="absolute inset-x-0 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 flex justify-center">
+                            <div class="bg-slate-900 border border-white/10 text-white text-xs rounded-lg py-2 px-3 shadow-xl whitespace-nowrap">
+                                <div class="font-bold text-sky-400 mb-1"><%= store.nama_store %></div>
+                                <div class="text-[10px] text-slate-400">ID: <%= store.id_store %> | <%= store.kategori %></div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Entrance / Screen Area equivalent -->
+    <div class="w-full max-w-sm h-12 border-2 border-slate-600 rounded-b-[40px] flex items-center justify-center shadow-[0_-5px_15px_rgba(0,0,0,0.2)_inset]">
+        <span class="text-slate-500 font-black tracking-[0.5em] text-sm uppercase">Pintu Utama & Eskalator</span>
+    </div>
+</div>

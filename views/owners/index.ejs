@@ -1,0 +1,52 @@
+<div class="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <p class="text-slate-400 text-sm">Daftar semua pemilik (Individu maupun Perusahaan) yang terdaftar dalam sistem.</p>
+    <a href="/owners/create" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-sky-900/50 text-sm">
+        + TAMBAH OWNER
+    </a>
+</div>
+
+<div class="glass-panel overflow-hidden flex flex-col p-4">
+    <div class="flex-1 overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[11px] text-slate-500 uppercase tracking-wider border-b border-white/5">
+                    <th class="pb-4 font-medium px-2">ID</th>
+                    <th class="pb-4 font-medium px-2">Nama Owner</th>
+                    <th class="pb-4 font-medium px-2">Tipe</th>
+                    <th class="pb-4 font-medium px-2">No. Telepon</th>
+                    <th class="pb-4 font-medium px-2">Alamat Lengkap</th>
+                    <th class="pb-4 font-medium px-2 text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                <% if(owners.length === 0) { %>
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-500 text-sm">Belum ada data owner.</td>
+                    </tr>
+                <% } else { %>
+                    <% owners.forEach(o => { %>
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td class="py-3 px-2 text-slate-400 font-mono text-xs">#<%= o.id_owner %></td>
+                        <td class="py-3 px-2 font-medium text-slate-200"><%= o.nama_owner %></td>
+                        <td class="py-3 px-2">
+                            <span class="status-badge <%= o.tipe_owner === 'Perusahaan' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' %>">
+                                <%= o.tipe_owner %>
+                            </span>
+                        </td>
+                        <td class="py-3 px-2 text-slate-400 text-xs"><%= o.no_telp %></td>
+                        <td class="py-3 px-2 text-slate-400 text-xs"><%= o.alamat %></td>
+                        <td class="py-3 px-2 text-right">
+                            <div class="flex justify-end gap-2">
+                                <a href="/owners/edit/<%= o.id_owner %>" class="text-xs bg-sky-500/20 text-sky-400 px-3 py-1 rounded-md border border-sky-500/30 hover:bg-sky-500/30 transition-all">Edit</a>
+                                <form action="/owners/delete/<%= o.id_owner %>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus owner ini?');">
+                                    <button type="submit" class="text-xs bg-rose-500/20 text-rose-400 px-3 py-1 rounded-md border border-rose-500/30 hover:bg-rose-500/30 transition-all">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

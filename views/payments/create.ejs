@@ -1,0 +1,44 @@
+<div class="mb-6">
+    <a href="/payments" class="text-sky-400 hover:text-sky-300 hover:underline flex items-center gap-1 text-sm font-medium transition-colors">
+        &larr; Kembali ke Pembayaran
+    </a>
+</div>
+
+<div class="glass-panel p-8 max-w-xl">
+    <div class="bg-white/5 rounded-xl p-4 mb-6 border border-white/10">
+        <h3 class="text-slate-300 text-sm font-bold mb-2">Informasi Tagihan</h3>
+        <div class="space-y-1 text-xs">
+            <div class="flex justify-between"><span class="text-slate-500">Owner</span><span class="text-white"><%= detail.nama_owner %></span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Store</span><span class="text-white"><%= detail.nama_store %> (<%= detail.jenis_kontrak %>)</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Periode</span><span class="text-white"><%= detail.periode %></span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Jatuh Tempo</span><span class="text-rose-400"><%= formatDate(detail.tanggal_jatuh_tempo) %></span></div>
+            <div class="flex justify-between pt-2 mt-2 border-t border-white/10">
+                <span class="text-slate-500 font-bold">Total Tagihan</span>
+                <span class="text-sky-400 font-bold text-sm"><%= formatCurrency(detail.nominal_tagihan) %></span>
+            </div>
+        </div>
+    </div>
+
+    <form action="/payments/store" method="POST" class="space-y-5">
+        <input type="hidden" name="id_kontrak" value="<%= detail.id_kontrak %>">
+        <input type="hidden" name="id_detail" value="<%= detail.id_detail %>">
+        <input type="hidden" name="periode" value="<%= detail.periode %>">
+
+        <div>
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Tanggal Validasi Bayar</label>
+            <input type="date" name="tanggal_bayar" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:bg-white/10 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-slate-300 mb-2">Nominal Pembayaran Diterima (Rp)</label>
+            <input type="number" name="jumlah_bayar" required min="1" value="<%= detail.nominal_tagihan %>"
+                   class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:bg-white/10 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all placeholder-slate-500">
+        </div>
+
+        <div class="pt-4">
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/50 transition-all">
+                SAHKAN PEMBAYARAN
+            </button>
+        </div>
+    </form>
+</div>

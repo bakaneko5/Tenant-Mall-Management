@@ -1,0 +1,85 @@
+<div class="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="glass-panel p-2 flex gap-2 w-full md:w-auto">
+        <form action="/stores" method="GET" class="flex flex-wrap gap-2 items-center w-full">
+            <select name="lantai" class="bg-white/5 border border-white/10 text-white rounded-lg px-3 py-1.5 text-sm outline-none w-32 focus:ring-2 focus:ring-sky-500">
+                <option value="" class="bg-slate-800">Semua Lantai</option>
+                <option value="1" class="bg-slate-800" <%= filters.lantai == '1' ? 'selected' : '' %>>Lantai 1</option>
+                <option value="2" class="bg-slate-800" <%= filters.lantai == '2' ? 'selected' : '' %>>Lantai 2</option>
+                <option value="3" class="bg-slate-800" <%= filters.lantai == '3' ? 'selected' : '' %>>Lantai 3</option>
+                <option value="4" class="bg-slate-800" <%= filters.lantai == '4' ? 'selected' : '' %>>Lantai 4</option>
+                <option value="5" class="bg-slate-800" <%= filters.lantai == '5' ? 'selected' : '' %>>Lantai 5</option>
+            </select>
+            
+            <select name="status" class="bg-white/5 border border-white/10 text-white rounded-lg px-3 py-1.5 text-sm outline-none w-36 focus:ring-2 focus:ring-sky-500">
+                <option value="" class="bg-slate-800">Semua Status</option>
+                <option value="Kosong" class="bg-slate-800" <%= filters.status == 'Kosong' ? 'selected' : '' %>>Kosong</option>
+                <option value="Disewa" class="bg-slate-800" <%= filters.status == 'Disewa' ? 'selected' : '' %>>Disewa</option>
+            </select>
+            
+            <button type="submit" class="px-4 py-1.5 bg-sky-600/20 hover:bg-sky-600/40 text-sky-400 border border-sky-500/30 text-sm font-medium rounded-lg transition-colors">
+                Filter
+            </button>
+            <a href="/stores" class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-sm font-medium rounded-lg transition-colors">
+                Reset
+            </a>
+        </form>
+    </div>
+    
+    <a href="/stores/create" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-sky-900/50 text-sm whitespace-nowrap">
+        + TAMBAH STORE
+    </a>
+</div>
+
+<div class="glass-panel overflow-hidden flex flex-col p-4">
+    <div class="flex-1 overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[11px] text-slate-500 uppercase tracking-wider border-b border-white/5">
+                    <th class="pb-4 font-medium px-2">ID Store</th>
+                    <th class="pb-4 font-medium px-2">Nama Store</th>
+                    <th class="pb-4 font-medium px-2 text-center">Kategori</th>
+                    <th class="pb-4 font-medium px-2 text-center">Lantai</th>
+                    <th class="pb-4 font-medium px-2 text-center">Blok</th>
+                    <th class="pb-4 font-medium px-2 text-right">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                <% if(stores.length === 0) { %>
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-500 text-sm">Belum ada data store ditemukan.</td>
+                    </tr>
+                <% } else { %>
+                    <% stores.forEach(s => { %>
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td class="py-3 px-2 text-slate-400 font-mono text-xs">#<%= s.id_store %></td>
+                        <td class="py-3 px-2 font-medium text-slate-200">
+                            <%= s.nama_store %>
+                            <a href="/stores/map?lantai=<%= s.lantai %>" class="block text-[10px] text-sky-400 mt-1 hover:underline">Lihat Denah/Zonasi</a>
+                        </td>
+                        <td class="py-3 px-2 text-center">
+                            <span class="status-badge <%= s.kategori === 'Food Store' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' %>">
+                                <%= s.kategori === 'Food Store' ? 'F&B' : 'Retail' %>
+                            </span>
+                        </td>
+                        <td class="py-3 px-2 text-center">
+                            <span class="font-medium text-slate-300">Lantai <%= s.lantai %></span>
+                        </td>
+                        <td class="py-3 px-2 text-center font-mono text-slate-400"><%= s.blok %></td>
+                        <td class="py-3 px-2 text-right">
+                            <div class="flex justify-end gap-2 items-center">
+                                <span class="status-badge <%= s.status === 'Kosong' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-sky-500/20 text-sky-400 border border-sky-500/30' %>">
+                                    <%= s.status %>
+                                </span>
+                                <a href="/stores/edit/<%= s.id_store %>" class="text-xs bg-sky-500/20 text-sky-400 px-2 py-1 rounded-md border border-sky-500/30 hover:bg-sky-500/30 transition-all">Edit</a>
+                                <form action="/stores/delete/<%= s.id_store %>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus store ini?');">
+                                    <button type="submit" class="text-xs bg-rose-500/20 text-rose-400 px-2 py-1 rounded-md border border-rose-500/30 hover:bg-rose-500/30 transition-all">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

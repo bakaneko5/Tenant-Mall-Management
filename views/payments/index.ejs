@@ -1,0 +1,87 @@
+<div class="mb-4">
+    <p class="text-slate-400 text-sm">Daftar tagihan yang menunggu validasi admin dan riwayat pembayaran.</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Tagihan Tertunda -->
+    <div class="glass-panel overflow-hidden flex flex-col p-4">
+        <h3 class="text-sm font-semibold mb-4 text-white">Antrian Tagihan / Deposit</h3>
+        <div class="flex-1 overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[11px] text-slate-500 uppercase tracking-wider border-b border-white/5">
+                        <th class="pb-3 font-medium px-2">Info Kontrak</th>
+                        <th class="pb-3 font-medium px-2">Jenis/Periode</th>
+                        <th class="pb-3 font-medium px-2 text-right">Nominal</th>
+                        <th class="pb-3 font-medium px-2 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <% if(details.length === 0) { %>
+                        <tr>
+                            <td colspan="4" class="p-8 text-center text-slate-500 text-xs">Tidak ada tagihan tertunda.</td>
+                        </tr>
+                    <% } else { %>
+                        <% details.forEach(d => { %>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <td class="py-3 px-2">
+                                <div class="font-medium text-slate-200"><%= d.nama_owner %></div>
+                                <div class="text-[10px] text-slate-500">Store: <%= d.nama_store %> (<%= d.jenis_kontrak %>)</div>
+                            </td>
+                            <td class="py-3 px-2 text-xs">
+                                <div class="text-slate-300"><%= d.periode %></div>
+                                <div class="text-[10px] text-rose-400">Batas: <%= formatDate(d.tanggal_jatuh_tempo) %></div>
+                            </td>
+                            <td class="py-3 px-2 text-right">
+                                <div class="font-bold text-sky-400 text-xs"><%= formatCurrency(d.nominal_tagihan) %></div>
+                            </td>
+                            <td class="py-3 px-2 text-right">
+                                <a href="/payments/create/<%= d.id_detail %>" class="text-[10px] bg-sky-500/20 text-sky-400 px-3 py-1.5 rounded-md border border-sky-500/30 hover:bg-sky-500/30 transition-all uppercase whitespace-nowrap">Validasi</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Riwayat Pembayaran -->
+    <div class="glass-panel overflow-hidden flex flex-col p-4">
+        <h3 class="text-sm font-semibold mb-4 text-white">Riwayat Validasi (Terbaru)</h3>
+        <div class="flex-1 overflow-x-auto border border-white/5 rounded-xl">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] text-slate-500 uppercase tracking-wider bg-white/5">
+                        <th class="py-2 px-3 font-medium">Tanggal</th>
+                        <th class="py-2 px-3 font-medium">Store & Owner</th>
+                        <th class="py-2 px-3 font-medium">Admin</th>
+                        <th class="py-2 px-3 text-right font-medium">Nominal</th>
+                    </tr>
+                </thead>
+                <tbody class="text-xs">
+                    <% if(history.length === 0) { %>
+                        <tr>
+                            <td colspan="4" class="p-6 text-center text-slate-500">Belum ada riwayat pembayaran.</td>
+                        </tr>
+                    <% } else { %>
+                        <% history.forEach(h => { %>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <td class="py-3 px-3 text-slate-400 whitespace-nowrap"><%= formatDate(h.tanggal_bayar) %></td>
+                            <td class="py-3 px-3">
+                                <div class="text-slate-300"><%= h.nama_store %></div>
+                                <div class="text-[10px] text-slate-500"><%= h.nama_owner %></div>
+                            </td>
+                            <td class="py-3 px-3 text-slate-400"><%= h.nama_admin %></td>
+                            <td class="py-3 px-3 text-right">
+                                <span class="font-bold text-emerald-400"><%= formatCurrency(h.jumlah_bayar) %></span>
+                                <div class="text-[9px] text-slate-500 uppercase"><%= h.jenis_pembayaran %></div>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

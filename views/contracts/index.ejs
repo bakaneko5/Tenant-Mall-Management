@@ -1,0 +1,51 @@
+<div class="mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <p class="text-slate-400 text-sm">Kelola kontrak sewa per owner dan status tagihannya.</p>
+    <a href="/contracts/create" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-sky-900/50 text-sm whitespace-nowrap">
+        + BUAT KONTRAK SEWA
+    </a>
+</div>
+
+<div class="glass-panel overflow-hidden flex flex-col p-4">
+    <div class="flex-1 overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[11px] text-slate-500 uppercase tracking-wider border-b border-white/5">
+                    <th class="pb-4 font-medium px-2">ID</th>
+                    <th class="pb-4 font-medium px-2">Owner & Store</th>
+                    <th class="pb-4 font-medium px-2 text-center">Durasi</th>
+                    <th class="pb-4 font-medium px-2">Jenis Kontrak</th>
+                    <th class="pb-4 font-medium px-2 text-right">Harga & Deposit</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                <% if(contracts.length === 0) { %>
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-500 text-sm">Belum ada kontrak.</td>
+                    </tr>
+                <% } else { %>
+                    <% contracts.forEach(c => { %>
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td class="py-3 px-2 text-slate-400 font-mono text-xs">#<%= c.id_kontrak %></td>
+                        <td class="py-3 px-2">
+                            <div class="font-medium text-slate-200"><%= c.nama_owner %></div>
+                            <div class="text-[10px] text-slate-500">Store: <%= c.nama_store %> (<%= c.blok %>)</div>
+                        </td>
+                        <td class="py-3 px-2 text-center text-slate-300 text-xs">
+                            <%= formatDate(c.tanggal_mulai) %><br><span class="text-slate-500">s/d</span><br><%= formatDate(c.tanggal_selesai) %>
+                        </td>
+                        <td class="py-3 px-2">
+                            <span class="status-badge <%= c.jenis_kontrak === 'Tahunan' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30' %>">
+                                <%= c.jenis_kontrak %>
+                            </span>
+                        </td>
+                        <td class="py-3 px-2 text-right">
+                            <div class="font-bold text-sky-400 text-xs"><%= formatCurrency(c.harga_sewa) %></div>
+                            <div class="text-[10px] text-emerald-400">Dep: <%= formatCurrency(c.deposit) %></div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
